@@ -13,7 +13,7 @@ npm install sqlite
 Then create a connection module:
 
 ```javascript
-import EasyDB from 'easy-db';
+import EasyDB from "easy-db";
 
 const db = new EasyDB();
 db.connect();
@@ -28,7 +28,7 @@ This creates a SQLite database file named `database.sqlite` in the current worki
 All methods are asynchronous and can be used with promises or async/await:
 
 ```javascript
-db.select({ table: 'Products' })
+db.select({ table: "Products" })
   .then((res) => {
     console.log(res.data);
   })
@@ -36,7 +36,7 @@ db.select({ table: 'Products' })
 ```
 
 ```javascript
-const result = await db.select({ table: 'Products' });
+const result = await db.select({ table: "Products" });
 ```
 
 ## API
@@ -46,11 +46,11 @@ const result = await db.select({ table: 'Products' });
 Creates a new table with an automatic `id INTEGER PRIMARY KEY` column.
 
 ```javascript
-const response = await db.createTable('Products', {
-  categoryId: 'number',
-  name: 'string',
-  description: 'string',
-  price: 'float',
+const response = await db.createTable("Products", {
+  categoryId: "number",
+  name: "string",
+  description: "string",
+  price: "float",
 });
 
 // => { created: true }
@@ -69,16 +69,16 @@ Supported data types:
 Selects records from a table.
 
 ```javascript
-const allProducts = await db.select({ table: 'Products' });
+const allProducts = await db.select({ table: "Products" });
 
 const filteredProducts = await db.select({
-  table: 'Products',
-  columns: 'categoryId, name, price',
-  filters: "categoryId = 100, price < 100.00",
+  table: "Products",
+  columns: "categoryId, name, price",
+  filters: ["categoryId = 100", "price < 100.00"],
 });
 ```
 
-The `filters` value is converted into a SQL `WHERE` clause joined with `AND`.
+The preferred `filters` format is an array of SQL condition strings. For backward compatibility, the legacy comma-separated string format is still supported and is normalized into a SQL `WHERE ... AND ...` clause.
 
 ### `db.insert`
 
@@ -86,11 +86,11 @@ Inserts one or more rows into a table.
 
 ```javascript
 const response = await db.insert({
-  table: 'Products',
+  table: "Products",
   records: {
     categoryId: 100,
-    name: 'iPad Pro - 12.9 inch - 256 GB',
-    description: 'First generation 12.9 inch iPad Pro',
+    name: "iPad Pro - 12.9 inch - 256 GB",
+    description: "First generation 12.9 inch iPad Pro",
     price: 1149.99,
   },
 });
@@ -100,16 +100,16 @@ const response = await db.insert({
 
 ```javascript
 const response = await db.insert({
-  table: 'Products',
+  table: "Products",
   records: [
     {
       categoryId: 100,
-      name: 'iPad Pro - 12.9 inch - 256 GB',
+      name: "iPad Pro - 12.9 inch - 256 GB",
       price: 1149.99,
     },
     {
       categoryId: 100,
-      name: 'Sony DVD Player',
+      name: "Sony DVD Player",
       price: 49.99,
     },
   ],
@@ -122,7 +122,7 @@ Updates rows by `id` or by a filter.
 
 ```javascript
 const response = await db.update({
-  table: 'Products',
+  table: "Products",
   updates: {
     id: 33545,
     price: 1049.99,
@@ -134,9 +134,9 @@ const response = await db.update({
 
 ```javascript
 const response = await db.update({
-  table: 'Products',
-  updates: { status: 'out of stock' },
-  filters: 'inventoryQuantity = 0',
+  table: "Products",
+  updates: { status: "out of stock" },
+  filters: ["inventoryQuantity = 0"],
 });
 ```
 
@@ -146,7 +146,7 @@ Deletes rows by `id` or by a filter.
 
 ```javascript
 const response = await db.delete({
-  table: 'Products',
+  table: "Products",
   ids: [68282, 33559],
 });
 
@@ -155,8 +155,8 @@ const response = await db.delete({
 
 ```javascript
 const response = await db.delete({
-  table: 'Products',
-  filters: "status = 'discontinued'",
+  table: "Products",
+  filters: ["status = 'discontinued'"],
 });
 ```
 
